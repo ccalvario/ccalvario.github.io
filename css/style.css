@@ -161,6 +161,16 @@ h2 {
     overflow: hidden;
 }
 
+.portfolio-buttons {
+    list-style: none;
+    padding: 0;
+}
+
+.portfolio-buttons li {
+    display: inline-block;
+    overflow: hidden;
+}
+
 .main-footer {
     background: #1a2930;
     color: white;
