@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Habitat Grid</title>
+<meta name="description" content="Habitat Grid is a relaxing tile-placement puzzle game. Fill a 5×5 grid with lakes, trees, bears, houses and more to build the highest-scoring habitat.">
+<link rel="icon" href="icon.png">
+<meta property="og:title" content="Habitat Grid">
+<meta property="og:description" content="A tile-placement puzzle game. Fill a 5×5 grid and build the highest-scoring habitat.">
+<meta property="og:image" content="icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f3efe7;
+    --panel: #fbf9f4;
+    --slot: #d8d1c6;
+    --text: #231f20;
+    --muted: #6b6259;
+    --sky: #2aa9f2;
+    --sun: #ffe500;
+    --link: #1b6fb3;
+
+    --lake: #b5cfd3;
+    --tree: #b8d8b8;
+    --bear: #d9c7a9;
+    --house: #d7b3b0;
+    --fish: #a3d5d7;
+    --eagle: #b8c5dc;
+    --mountain: #c7b8d7;
+    --grass: #d6d8a5;
+    --desert: #d8a5d0;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 500 17px/1.55 Nunito, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  main { max-width: 780px; margin: 0 auto; padding: 16px 16px 56px; }
+  h2, h3, .cost, .step-num { font-family: Fredoka, Nunito, system-ui, sans-serif; }
+  h2 { font-size: 1.7rem; font-weight: 600; line-height: 1.2; margin: 56px 0 6px; text-align: center; }
+  .lead { color: var(--muted); text-align: center; max-width: 520px; margin: 0 auto 24px; }
+  p { margin: 0 0 14px; }
+  a { color: var(--link); }
+
+  /* Hero: the main menu scene */
+  .hero {
+    position: relative;
+    overflow: hidden;
+    border-radius: 28px;
+    background: var(--sky);
+    text-align: center;
+    color: #fff;
+    padding: 48px 20px 0;
+  }
+  .hero-content { position: relative; z-index: 2; }
+  .hero h1 { margin: 0 0 14px; line-height: 0; }
+  .hero h1 img { width: min(78%, 420px); height: auto; }
+  .tagline { font-weight: 700; font-size: 1.1rem; max-width: 440px; margin: 0 auto 24px; text-shadow: 0 1px 0 rgba(20, 90, 150, 0.35); }
+  .cta { text-align: center; margin: 28px 0 0; }
+  .cta a { display: inline-block; line-height: 0; }
+  .cta img { height: 64px; width: auto; }
+  .ground { display: block; width: calc(100% + 40px); height: auto; margin: -8px -20px 0; position: relative; z-index: 1; }
+  .sun {
+    position: absolute;
+    z-index: 0;
+    top: 24px; right: 4%;
+    width: clamp(56px, 12vw, 80px);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: var(--sun);
+  }
+  @media (max-width: 560px) {
+    .hero { padding-top: 84px; }
+    .sun { top: 14px; }
+  }
+  .cloud { position: absolute; z-index: 0; opacity: 0.95; animation: drift 60s linear infinite alternate; }
+  .cloud-a { width: 34%; max-width: 220px; top: 6px; left: -16%; }
+  .cloud-b { width: 20%; max-width: 130px; top: 120px; right: -2%; animation-duration: 45s; animation-direction: alternate-reverse; }
+  @keyframes drift { from { transform: translateX(-10%); } to { transform: translateX(45%); } }
+
+  /* Board and belt */
+  .play-area { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+  .tile {
+    aspect-ratio: 1;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: pop 0.4s cubic-bezier(0.3, 1.6, 0.5, 1) backwards;
+  }
+  .tile img { width: 86%; height: 86%; display: block; }
+  @keyframes pop { from { transform: scale(0.4); opacity: 0; } }
+
+  .lake { background: var(--lake); }
+  .tree { background: var(--tree); }
+  .bear { background: var(--bear); }
+  .house { background: var(--house); }
+  .fish { background: var(--fish); }
+  .eagle { background: var(--eagle); }
+  .mountain { background: var(--mountain); }
+  .grass { background: var(--grass); }
+  .desert { background: var(--desert); }
+
+  .belt-row { display: flex; align-items: flex-end; gap: 14px; width: min(100%, 400px); }
+  .belt, .extras { display: grid; gap: 6px; padding: 8px; border-radius: 16px; background: var(--slot); }
+  .belt { grid-template-columns: repeat(4, 1fr); flex: 4; }
+  .extras { grid-template-columns: repeat(2, 1fr); flex: 2; }
+  .slot { text-align: center; }
+  .cost { display: flex; align-items: center; justify-content: center; gap: 3px; font-weight: 600; font-size: 0.95rem; margin-top: 3px; }
+  .cost img { width: 16px; height: 16px; }
+
+  /* How to play */
+  .steps { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+  .steps li { display: flex; gap: 14px; align-items: center; background: var(--panel); border-radius: 16px; padding: 14px 16px; }
+  .step-num {
+    flex: none;
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: var(--sky);
+    color: #fff;
+    font-weight: 700; font-size: 1.25rem;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 3px 0 #1b7fbd;
+  }
+
+  /* Scoring guide */
+  .guide { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; }
+  .guide li { display: flex; gap: 12px; align-items: center; background: var(--panel); border-radius: 16px; padding: 10px; }
+  .guide .tile { flex: none; width: 68px; animation: none; }
+  .guide h3 { font-size: 1.1rem; font-weight: 600; margin: 0; }
+  .guide p { margin: 0; color: var(--muted); font-size: 0.92rem; line-height: 1.4; }
+
+  .features { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; text-align: center; }
+  .features li { background: var(--panel); border-radius: 16px; padding: 16px 12px; font-weight: 700; }
+
+  footer { margin-top: 56px; color: var(--muted); font-size: 0.93rem; text-align: center; }
+  footer p { margin: 0 0 6px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cloud, .tile { animation: none; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <header class="hero">
+    <div class="sun"></div>
+    <img class="cloud cloud-a" src="img/cloud_big.png" alt="">
+    <img class="cloud cloud-b" src="img/cloud_small.png" alt="">
+    <div class="hero-content">
+      <h1><img src="img/title.png" alt="Habitat Grid" width="1740" height="620"></h1>
+      <p class="tagline">Place tiles, grow a habitat, chase your best score.</p>
+    </div>
+    <img class="ground" src="img/ground.png" alt="" width="1024" height="520">
+  </header>
+
+  <p class="cta"><a href="https://play.google.com/store/apps/details?id=com.ccalvario.habitatgrid"><img src="img/google-play.png" alt="Get it on Google Play" width="2000" height="593"></a></p>
+
+  <h2>Fill the grid</h2>
+  <p class="lead">Every game is 25 tiles on a 5×5 grid. Where each one goes decides what it scores.</p>
+  <div class="play-area">
+    <div class="belt-row" role="img" aria-label="The belt: four tiles costing 4, 3, 2 and 1 coins, plus grass refunding 1 coin and desert refunding 2">
+      <div class="belt">
+        <div class="slot"><div class="tile bear"><img src="img/bear.png" alt=""></div><div class="cost"><img src="img/coin.png" alt="">4</div></div>
+        <div class="slot"><div class="tile lake"><img src="img/lake.png" alt=""></div><div class="cost"><img src="img/coin.png" alt="">3</div></div>
+        <div class="slot"><div class="tile house"><img src="img/house.png" alt=""></div><div class="cost"><img src="img/coin.png" alt="">2</div></div>
+        <div class="slot"><div class="tile eagle"><img src="img/eagle.png" alt=""></div><div class="cost"><img src="img/coin.png" alt="">1</div></div>
+      </div>
+      <div class="extras">
+        <div class="slot"><div class="tile grass"><img src="img/grass.png" alt=""></div><div class="cost"><img src="img/coin.png" alt="">+1</div></div>
+        <div class="slot"><div class="tile desert"><img src="img/desert.png" alt=""></div><div class="cost"><img src="img/coin.png" alt="">+2</div></div>
+      </div>
+    </div>
+  </div>
+
+  <h2>How to play</h2>
+  <p class="lead">Easy to learn, with plenty to think about on every move.</p>
+  <ol class="steps">
+    <li><span class="step-num">1</span><span>Tap a tile on the belt, then tap the grid to place it.</span></li>
+    <li><span class="step-num">2</span><span>Each new tile must go next to the last one you placed, diagonals included.</span></li>
+    <li><span class="step-num">3</span><span>Belt tiles cost coins. Slots further left cost more: 4, 3, 2 and 1 from left to right.</span></li>
+    <li><span class="step-num">4</span><span>Running low? Grass and desert are always available and give coins back, but they push the whole belt along.</span></li>
+    <li><span class="step-num">5</span><span>The game ends when the grid is full or you run out of moves.</span></li>
+  </ol>
+
+  <h2>Scoring guide</h2>
+  <p class="lead">Tiles score from their neighbors above, below, left and right. Diagonals do not count.</p>
+  <ul class="guide">
+    <li><div class="tile lake"><img src="img/lake.png" alt=""></div><div><h3>Lake</h3><p>Always scores 1.</p></div></li>
+    <li><div class="tile tree"><img src="img/tree.png" alt=""></div><div><h3>Tree</h3><p>Scores 1 per adjacent tree or lake.</p></div></li>
+    <li><div class="tile bear"><img src="img/bear.png" alt=""></div><div><h3>Bear</h3><p>Scores 1 per adjacent fish, grass, tree or lake.</p></div></li>
+    <li><div class="tile house"><img src="img/house.png" alt=""></div><div><h3>House</h3><p>Chains with neighboring houses. Each scores by build order in its chain: 1, 2, 4, 8, then 16.</p></div></li>
+    <li><div class="tile fish"><img src="img/fish.png" alt=""></div><div><h3>Fish</h3><p>Scores 2 per adjacent lake.</p></div></li>
+    <li><div class="tile eagle"><img src="img/eagle.png" alt=""></div><div><h3>Eagle</h3><p>Scores 1 per adjacent fish. Can be placed anywhere on the grid.</p></div></li>
+    <li><div class="tile mountain"><img src="img/mountain.png" alt=""></div><div><h3>Mountain</h3><p>Scores 1 and resets the belt.</p></div></li>
+    <li><div class="tile grass"><img src="img/grass.png" alt=""></div><div><h3>Grass</h3><p>Refunds 1 coin, scores 0, shifts the belt.</p></div></li>
+    <li><div class="tile desert"><img src="img/desert.png" alt=""></div><div><h3>Desert</h3><p>Refunds 2 coins, scores 0, shifts the belt.</p></div></li>
+  </ul>
+
+  <h2>Features</h2>
+  <p class="lead">A quick puzzle you can come back to every day.</p>
+  <ul class="features">
+    <li>Quick single-player games</li>
+    <li>Daily, weekly and all-time bests</li>
+    <li>Leaderboards and cloud save</li>
+    <li>Guided tutorial</li>
+  </ul>
+
+  <footer>
+    <p><a href="privacy-policy.html">Privacy Policy</a> · <a href="mailto:ccalvario.games@protonmail.com">Contact</a></p>
+    <p>© 2026 Cuauhtemoc Calvario</p>
+  </footer>
+</main>
+</body>
+</html>
