@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Electricity Calculator for Android</title>
+<meta name="description" content="List your appliances, how long each one runs, and see your monthly electricity use in kWh and what it will cost.">
+<meta name="theme-color" content="#179b36">
+<link rel="icon" type="image/png" href="images/icon.png">
+<meta property="og:title" content="Electricity Calculator for Android">
+<meta property="og:description" content="See what each appliance adds to your electricity bill.">
+<meta property="og:image" content="images/icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #179b36;
+    --green-deep: #0b5a1e;
+    --ink: #10281a;
+    --ink-soft: #4d6355;
+    --paper: #f5f9f3;
+    --card: #ffffff;
+    --line: #d5e2d4;
+    --blue: #00a3ee;
+    --bulb: #f2c40f;
+
+    --display: "Roboto", "Segoe UI", system-ui, sans-serif;
+    --body: "Roboto", "Segoe UI", system-ui, sans-serif;
+
+    --gutter: clamp(20px, 5vw, 56px);
+    --measure: 1120px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  html { -webkit-text-size-adjust: 100%; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--body);
+    font-size: 1.0625rem;
+    line-height: 1.55;
+  }
+
+  img { display: block; max-width: 100%; height: auto; }
+
+  h1, h2, h3 {
+    font-family: var(--display);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  p { margin: 0; }
+
+  a { color: inherit; }
+
+  :focus-visible {
+    outline: 3px solid var(--blue);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  .wrap {
+    max-width: var(--measure);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
+
+  /* Top band: same green as the app's toolbar */
+
+  .band {
+    background: var(--green);
+    color: #fff;
+  }
+
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding-block: 20px;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 1.125rem;
+    text-decoration: none;
+  }
+
+  .brand img {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.35);
+  }
+
+  .topbar-link {
+    font-weight: 600;
+    font-size: 0.9375rem;
+    text-underline-offset: 4px;
+  }
+
+  .hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr);
+    gap: clamp(24px, 5vw, 72px);
+    align-items: start;
+    padding-top: clamp(32px, 6vw, 72px);
+  }
+
+  .hero-copy { padding-bottom: clamp(48px, 8vw, 104px); }
+
+  .hero h1 {
+    font-size: clamp(2.5rem, 6.4vw, 4.75rem);
+    max-width: 13ch;
+  }
+
+  .hero-lede {
+    margin-top: 24px;
+    max-width: 44ch;
+    font-size: clamp(1.0625rem, 1.6vw, 1.25rem);
+    color: rgba(255, 255, 255, 0.92);
+  }
+
+  .hero-actions {
+    margin-top: 36px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px 24px;
+  }
+
+  .play-badge {
+    display: inline-block;
+    transition: transform 0.15s ease;
+  }
+
+  .play-badge img { width: auto; height: 60px; }
+
+  .play-badge:hover { transform: translateY(-2px); }
+
+  .hero-note { font-size: 0.9375rem; color: rgba(255, 255, 255, 0.85); }
+
+  .hero-phone {
+    margin-bottom: -140px;
+    justify-self: end;
+    width: min(100%, 320px);
+  }
+
+  .phone {
+    border: 8px solid var(--ink);
+    border-radius: 34px;
+    overflow: hidden;
+    background: var(--ink);
+    box-shadow: 0 30px 50px -28px rgba(16, 40, 26, 0.6);
+  }
+
+  .phone img { width: 100%; border-radius: 26px; }
+
+  /* Sentence calculator */
+
+  .try {
+    padding-top: clamp(72px, 10vw, 128px);
+    padding-bottom: clamp(64px, 9vw, 112px);
+  }
+
+  .try h2 {
+    font-size: clamp(1.75rem, 3.6vw, 2.5rem);
+    max-width: 18ch;
+  }
+
+  .try-intro {
+    margin-top: 14px;
+    max-width: 52ch;
+    color: var(--ink-soft);
+  }
+
+  .sentence {
+    margin-top: 40px;
+    max-width: 22em;
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: clamp(1.5rem, 3.4vw, 2.5rem);
+    line-height: 1.5;
+    letter-spacing: -0.015em;
+  }
+
+  .sentence select,
+  .sentence input {
+    font: inherit;
+    font-weight: 700;
+    color: var(--green-deep);
+    background: transparent;
+    border: 0;
+    border-bottom: 3px solid var(--green);
+    border-radius: 0;
+    padding: 0 4px;
+    margin: 0 2px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .sentence select {
+    max-width: 100%;
+    cursor: pointer;
+    padding-right: 0;
+  }
+
+  .sentence input { width: 2.6em; text-align: center; }
+  .sentence input.wide { width: 3.6em; }
+
+  .sentence select:hover,
+  .sentence input:hover { background: #e6f2e4; }
+
+  .readout {
+    margin-top: 40px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px clamp(32px, 6vw, 80px);
+    padding-top: 28px;
+    border-top: 2px solid var(--ink);
+    max-width: 720px;
+  }
+
+  .readout dl { margin: 0; }
+
+  .readout dt { font-size: 0.9375rem; color: var(--ink-soft); }
+
+  .readout dd {
+    margin: 2px 0 0;
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(2.25rem, 6vw, 3.75rem);
+    line-height: 1;
+    letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .readout .unit {
+    font-size: 0.45em;
+    letter-spacing: 0;
+    margin-left: 0.2em;
+    color: var(--ink-soft);
+  }
+
+  .formula {
+    margin-top: 20px;
+    font-size: 0.9375rem;
+    color: var(--ink-soft);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Screens */
+
+  .screens {
+    background: var(--card);
+    border-block: 1px solid var(--line);
+    padding-block: clamp(56px, 8vw, 104px);
+  }
+
+  .screen {
+    display: grid;
+    grid-template-columns: minmax(0, 280px) minmax(0, 1fr);
+    gap: clamp(28px, 6vw, 88px);
+    align-items: center;
+  }
+
+  .screen + .screen { margin-top: clamp(56px, 8vw, 104px); }
+
+  .screen.flip { grid-template-columns: minmax(0, 1fr) minmax(0, 280px); }
+  .screen.flip .phone { order: 2; }
+
+  .screen h3 {
+    font-size: clamp(1.625rem, 3.2vw, 2.25rem);
+    max-width: 20ch;
+  }
+
+  .screen p {
+    margin-top: 16px;
+    max-width: 50ch;
+    color: var(--ink-soft);
+  }
+
+  /* Also in the app */
+
+  .more { padding-block: clamp(56px, 8vw, 104px); }
+
+  .more h2 { font-size: clamp(1.75rem, 3.6vw, 2.5rem); }
+
+  .more-list {
+    margin: 36px 0 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 32px clamp(24px, 4vw, 56px);
+  }
+
+  .more-list div {
+    padding-top: 18px;
+    border-top: 2px solid var(--green);
+  }
+
+  .more-list dt {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 1.25rem;
+    line-height: 1.2;
+  }
+
+  .more-list dd {
+    margin: 8px 0 0;
+    color: var(--ink-soft);
+  }
+
+  /* Closing band */
+
+  .closing { padding-block: clamp(48px, 7vw, 88px); }
+
+  .closing-inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 28px;
+  }
+
+  .closing h2 {
+    font-size: clamp(1.75rem, 4vw, 2.75rem);
+    max-width: 16ch;
+  }
+
+  footer {
+    padding-block: 28px;
+    font-size: 0.9375rem;
+    color: var(--ink-soft);
+  }
+
+  .footer-inner {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 8px 24px;
+  }
+
+  @media (max-width: 760px) {
+    .hero { grid-template-columns: 1fr; }
+    .hero-copy { padding-bottom: 0; }
+    .hero-phone { justify-self: center; width: min(78%, 300px); margin-bottom: -96px; }
+    .try { padding-top: 136px; }
+    .topbar-link { display: none; }
+
+    .screen,
+    .screen.flip { grid-template-columns: 1fr; }
+    .screen .phone { width: min(78%, 280px); margin-inline: auto; }
+    .screen.flip .phone { order: 0; }
+
+    .more-list { grid-template-columns: 1fr; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .play-badge { transition: none; }
+    .play-badge:hover { transform: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="band">
+  <div class="wrap">
+    <header class="topbar">
+      <a class="brand" href="#top" id="top">
+        <img src="images/icon.png" alt="" width="40" height="40">
+        Electricity Calculator
+      </a>
+      <a class="topbar-link" href="https://play.google.com/store/apps/details?id=prj.ccalvario.electricitycalculator">Get it on Google Play</a>
+    </header>
+
+    <div class="hero">
+      <div class="hero-copy">
+        <h1>See what each appliance adds to your electricity bill</h1>
+        <p class="hero-lede">List the things you plug in and how long each one runs. The app adds up your monthly use in kWh and tells you roughly what it will cost.</p>
+        <div class="hero-actions">
+          <a class="play-badge" href="https://play.google.com/store/apps/details?id=prj.ccalvario.electricitycalculator"><img src="images/google-play.png" width="2000" height="593" alt="Get it on Google Play"></a>
+          <span class="hero-note">For Android</span>
+        </div>
+      </div>
+
+      <div class="hero-phone phone">
+        <img src="images/screenshot-items.png" width="1344" height="2992"
+             alt="The app's main screen: monthly consumption of 267.25 kWh costing $400.88, above a list of appliances with their days, daily time and watts.">
+      </div>
+    </div>
+  </div>
+</div>
+
+<main>
+  <section class="try" aria-labelledby="try-title">
+    <div class="wrap">
+      <h2 id="try-title">Try it with one appliance</h2>
+      <p class="try-intro">This is the sum the app does for every item on your list. Change anything underlined.</p>
+
+      <p class="sentence">
+        <select id="appliance" aria-label="Appliance">
+          <option value="4500">An electric water heater</option>
+          <option value="500">A blender</option>
+          <option value="200">A desktop computer</option>
+          <option value="120">A 65&quot; LED TV</option>
+          <option value="100">A 50&quot; LED TV</option>
+          <option value="30">A monitor</option>
+          <option value="25">A small fan</option>
+          <option value="10">An LED bulb</option>
+        </select>
+        running
+        <input id="hours" type="number" inputmode="decimal" min="0" max="24" step="0.5" value="1" aria-label="Hours per day">
+        hours a day,
+        <input id="days" type="number" inputmode="numeric" min="1" max="30" step="1" value="30" aria-label="Days per month">
+        days a month, at
+        <input id="rate" class="wide" type="number" inputmode="decimal" min="0" step="0.01" value="0.15" aria-label="Cost per kWh">
+        per kWh.
+      </p>
+
+      <div class="readout" aria-live="polite">
+        <dl>
+          <dt>Monthly use</dt>
+          <dd><span id="kwh">135.00</span><span class="unit">kWh</span></dd>
+        </dl>
+        <dl>
+          <dt>Monthly cost</dt>
+          <dd>$<span id="cost">20.25</span></dd>
+        </dl>
+      </div>
+      <p class="formula" id="formula">4500 W × 1 h × 30 days ÷ 1000 = 135.00 kWh</p>
+    </div>
+  </section>
+
+  <section class="screens" aria-label="What the app does">
+    <div class="wrap">
+      <article class="screen">
+        <div class="phone">
+          <img src="images/screenshot-chart.png" width="1344" height="2992" loading="lazy"
+               alt="A donut chart of 267.25 kWh split by appliance, with the electric water heater at 50.5 percent, followed by a table of kWh per month for each item.">
+        </div>
+        <div>
+          <h3>Find the appliance that runs up the bill</h3>
+          <p>The details screen splits your month into a chart and ranks every item by kWh. In this example an electric water heater used for one hour a day is half of the total, more than both TVs, the computer and the blender put together.</p>
+        </div>
+      </article>
+
+      <article class="screen flip">
+        <div class="phone">
+          <img src="images/screenshot-presets.png" width="1344" height="2992" loading="lazy"
+               alt="The Select an item screen with a search box and categories: TV, Lights, Fan, Air Conditioner, Kitchen, Home and Computer. The TV category is open showing four sizes with their watts.">
+        </div>
+        <div>
+          <h3>Start from a list of common appliances</h3>
+          <p>You don't need to know the wattage of your fridge. Pick from more than 40 appliances with typical watts already filled in, grouped by TV, lights, fans, air conditioning, kitchen, home and computer. Search if you'd rather not browse.</p>
+        </div>
+      </article>
+
+      <article class="screen">
+        <div class="phone">
+          <img src="images/screenshot-add-item.png" width="1344" height="2992" loading="lazy"
+               alt="The Add Item form with fields for name, quantity, watts, days per month and daily usage time.">
+        </div>
+        <div>
+          <h3>Enter how you actually use it</h3>
+          <p>Each item takes a name, how many you have, its watts, the days per month you use it and the time it runs each day. If the label on your appliance says something different from the preset, type your own number.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="more" aria-labelledby="more-title">
+    <div class="wrap">
+      <h2 id="more-title">Also in the app</h2>
+      <dl class="more-list">
+        <div>
+          <dt>Fixed or tiered rates</dt>
+          <dd>Enter one price per kWh, or set up the tiers your provider charges so the cost follows the way your bill is calculated.</dd>
+        </div>
+        <div>
+          <dt>Backup to a file</dt>
+          <dd>Export your items and rates to a file, in Google Drive for example, and import it again on another phone.</dd>
+        </div>
+      </dl>
+    </div>
+  </section>
+</main>
+
+<div class="band closing">
+  <div class="wrap closing-inner">
+    <h2>Know the number before the bill arrives</h2>
+    <a class="play-badge" href="https://play.google.com/store/apps/details?id=prj.ccalvario.electricitycalculator"><img src="images/google-play.png" width="2000" height="593" alt="Get it on Google Play"></a>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap footer-inner">
+    <span>Electricity Calculator, developed by Cuauhtémoc Calvario. Contact: <a href="mailto:contact@ccalvario.com">contact@ccalvario.com</a></span>
+    <span>Costs shown are estimates. Your bill may include taxes and fixed charges.</span>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    var appliance = document.getElementById('appliance');
+    var hours = document.getElementById('hours');
+    var days = document.getElementById('days');
+    var rate = document.getElementById('rate');
+    var kwhOut = document.getElementById('kwh');
+    var costOut = document.getElementById('cost');
+    var formula = document.getElementById('formula');
+
+    function clamp(value, min, max) {
+      if (isNaN(value)) return min;
+      return Math.min(Math.max(value, min), max);
+    }
+
+    function update() {
+      var watts = Number(appliance.value);
+      var h = clamp(parseFloat(hours.value), 0, 24);
+      var d = clamp(parseFloat(days.value), 0, 30);
+      var r = clamp(parseFloat(rate.value), 0, Infinity);
+      var kwh = watts * h * d / 1000;
+
+      kwhOut.textContent = kwh.toFixed(2);
+      costOut.textContent = (kwh * r).toFixed(2);
+      formula.textContent = watts + ' W × ' + h + ' h × ' + d + ' days ÷ 1000 = ' + kwh.toFixed(2) + ' kWh';
+    }
+
+    [appliance, hours, days, rate].forEach(function (el) {
+      el.addEventListener('input', update);
+    });
+    update();
+  })();
+</script>
+</body>
+</html>
