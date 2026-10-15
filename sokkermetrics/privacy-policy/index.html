@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="author" content="Cuauhtemoc Calvario">
+  <meta name="description" content="Privacy policy for the Sokkermetrics app.">
+  <title>Sokkermetrics Privacy Policy</title>
+  <style>
+    :root {
+      --bg: #ffffff;
+      --fg: #1f2328;
+      --muted: #59636e;
+      --accent: #013871;
+      --border: #d1d9e0;
+      --surface: #f6f8fa;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1f1f1f;
+        --fg: #cccccc;
+        --muted: #9d9d9d;
+        --accent: #4daafc;
+        --border: #3c3c3c;
+        --surface: #181818;
+      }
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--fg);
+      font: 16px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    }
+    main {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 40px 16px 64px;
+    }
+    h1 { margin: 0 0 4px; font-size: 2rem; line-height: 1.2; }
+    h2 {
+      margin: 40px 0 8px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+      font-size: 1.3rem;
+    }
+    h3 { margin: 24px 0 4px; font-size: 1.05rem; }
+    a { color: var(--accent); }
+    .meta { color: var(--muted); margin: 0 0 24px; }
+    .summary {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--accent);
+      border-radius: 6px;
+      padding: 12px 20px;
+    }
+    table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 0.95rem; }
+    th, td { text-align: left; vertical-align: top; padding: 8px; border-bottom: 1px solid var(--border); }
+    th { background: var(--surface); }
+    .table-wrap { overflow-x: auto; }
+    footer { margin-top: 48px; color: var(--muted); font-size: 0.9rem; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Privacy Policy</h1>
+  <p class="meta">Sokkermetrics &middot; Effective date: October 14, 2026 &middot; Author: Cuauhtemoc Calvario</p>
+
+  <p>
+    This Privacy Policy explains how the Sokkermetrics mobile application (the
+    &ldquo;App&rdquo;), developed by Cuauhtemoc Calvario (&ldquo;I&rdquo;,
+    &ldquo;me&rdquo;), handles information when you use it. Sokkermetrics is an
+    unofficial companion app for the online football manager game
+    <a href="https://sokker.org">Sokker</a> that lets you track your squad, juniors,
+    training and team over time. It is not affiliated with or endorsed by Sokker.
+  </p>
+
+  <div class="summary">
+    <p><strong>In short:</strong></p>
+    <ul>
+      <li>I do not run any server. Your Sokker login and your synced team data stay on your device.</li>
+      <li>The App talks to sokker.org to download your team data, using your own Sokker account.</li>
+      <li>Optional backups go to a file you choose or to a hidden App folder in your own Google Drive.</li>
+      <li>On Android, the App uses Google services: Firebase Analytics, Firebase Crashlytics and Google AdMob (ads), which collect some device data as described below.</li>
+      <li>I do not sell your personal information.</li>
+    </ul>
+  </div>
+
+  <h2>1. Information the App handles</h2>
+
+  <h3>1.1 Your Sokker account login</h3>
+  <p>
+    To sync your data, you log in with your sokker.org username and password.
+    These are sent directly from your device to sokker.org over an encrypted
+    (HTTPS) connection. They are never sent to me or to any other party.
+  </p>
+  <p>
+    Your username and team ID are kept on your device so the App can show your
+    data. If you tick <em>Remember me</em>, your password is also kept, so you do
+    not need to type it on every sync. All of these are stored in your
+    device&rsquo;s secure storage (the Android Keystore or iOS Keychain). Logging
+    out removes them.
+  </p>
+
+  <h3>1.2 Sokker game data</h3>
+  <p>
+    The App downloads data about your club from the Sokker XML interface at
+    sokker.org: players and juniors (skills, values, salaries, injuries, cards,
+    nationality), trainers, team details, kits, weekly figures and training
+    reports. This data is saved in a database on your device so you can see how it
+    changes week by week, including players and juniors who have left your club.
+    It is not uploaded anywhere unless you make a backup (see below).
+  </p>
+  <p>
+    The data you get from sokker.org is governed by Sokker&rsquo;s own terms and
+    privacy policy.
+  </p>
+
+  <h3>1.3 App settings</h3>
+  <p>
+    Preferences such as your chosen theme and whether Google Drive backup is
+    connected are stored on your device only.
+  </p>
+
+  <h2>2. Backups</h2>
+
+  <h3>2.1 Backup to a file</h3>
+  <p>
+    You can save a copy of the App&rsquo;s database to a file and restore it later,
+    for example to move to a new device. The file is written to, or read from, a
+    location you pick with your device&rsquo;s file picker. The App does not access
+    any other files. You are responsible for where you keep that file and who you
+    share it with.
+  </p>
+
+  <h3>2.2 Google Drive backup (optional, Android)</h3>
+  <p>
+    If you choose <em>Connect Google Drive</em> in Settings, you sign in with your
+    Google account through Google Sign-In and grant the App the
+    <code>drive.appdata</code> permission. This lets the App use only its own
+    hidden application data folder in your Google Drive. The App cannot see,
+    read or change any of your other Drive files.
+  </p>
+  <ul>
+    <li>The App stores a single backup copy of its database in that folder.</li>
+    <li>Your Google account email is shown in Settings so you know which account is connected. It is not stored anywhere else or sent to me.</li>
+    <li>The backup is held by Google under the <a href="https://policies.google.com/privacy">Google Privacy Policy</a>.</li>
+    <li>You can disconnect at any time in Settings. To delete the backup, open Google Drive &rarr; Settings &rarr; Manage apps, find Sokkermetrics and choose <em>Delete hidden app data</em>, or remove the App&rsquo;s access in your <a href="https://myaccount.google.com/permissions">Google Account permissions</a>.</li>
+  </ul>
+
+  <h2>3. Third-party services and SDKs</h2>
+  <p>
+    The App uses the following third-party services. On Android, Firebase and
+    AdMob are active in release builds. Each service processes data under its own
+    privacy policy.
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Service</th><th>Purpose</th><th>Data collected</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><a href="https://sokker.org">Sokker (sokker.org)</a></td>
+          <td>Source of your game data</td>
+          <td>Your Sokker login, sent only to log in and download your team data.</td>
+        </tr>
+        <tr>
+          <td><a href="https://firebase.google.com/support/privacy">Google Firebase Analytics</a></td>
+          <td>Understanding how the App is used, to improve it</td>
+          <td>Screens viewed, login events, app version, device model, operating system, language, approximate location (country/region derived from IP address), app instance ID, advertising ID, install source, and usage times.</td>
+        </tr>
+        <tr>
+          <td><a href="https://firebase.google.com/support/privacy">Google Firebase Crashlytics</a></td>
+          <td>Finding and fixing crashes and errors</td>
+          <td>Crash reports and stack traces, device model, operating system, app version, device state at the time of the crash (such as memory and orientation), and a Crashlytics installation identifier.</td>
+        </tr>
+        <tr>
+          <td><a href="https://policies.google.com/technologies/ads">Google AdMob</a> with the Google User Messaging Platform</td>
+          <td>Showing a banner ad, which keeps the App free, and asking for your consent where required</td>
+          <td>Advertising ID, IP address, device and app information, ad interactions, and your consent choices. Depending on your consent, ads may be personalised.</td>
+        </tr>
+        <tr>
+          <td><a href="https://policies.google.com/privacy">Google Sign-In and Google Drive API</a></td>
+          <td>Optional Drive backup</td>
+          <td>Your Google account email and an access token, used only to read and write the App&rsquo;s backup in its hidden Drive folder.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p>
+    Read more about how Google uses information from apps that use its services at
+    <a href="https://policies.google.com/technologies/partner-sites">How Google uses information from sites or apps that use our services</a>.
+  </p>
+
+  <h2>4. Advertising and your consent</h2>
+  <p>
+    The App shows a banner ad from Google AdMob. When you are in a region where
+    the law requires it, such as the European Economic Area, the United Kingdom or
+    Switzerland, the App asks for your consent through Google&rsquo;s consent form
+    before any ads are requested. No ads are requested until consent has been
+    gathered.
+  </p>
+  <p>
+    You can change your choice at any time with <em>Settings &rarr; Ads &rarr;
+    Privacy options</em> (shown when it applies in your region). You can also reset
+    or delete your advertising ID, or opt out of personalised ads, in your
+    device&rsquo;s settings (on Android: <em>Settings &rarr; Google &rarr; Ads</em>,
+    or <em>Settings &rarr; Security &amp; privacy &rarr; Privacy &rarr; Ads</em>).
+  </p>
+
+  <h2>5. Device permissions</h2>
+  <ul>
+    <li><strong>Internet access</strong>: to reach sokker.org, Google Drive, Firebase and AdMob.</li>
+    <li><strong>Advertising ID</strong> (Android, <code>AD_ID</code>): read by Google AdMob and Firebase Analytics to show and measure ads and to measure App usage, as described above.</li>
+    <li><strong>Android Privacy Sandbox ad services</strong> (Topics and Attribution APIs, <code>ACCESS_ADSERVICES_*</code>): added by the Google Mobile Ads and Firebase Analytics SDKs, and used for ad relevance and measurement where your device supports them. You can turn these off in your device&rsquo;s ad privacy settings.</li>
+    <li><strong>Install referrer</strong> (Google Play): used by Firebase Analytics to know where the App was installed from.</li>
+  </ul>
+  <p>
+    The App does not ask for access to your contacts, camera, microphone, photos or
+    precise location.
+  </p>
+
+  <h2>6. How long data is kept</h2>
+  <ul>
+    <li><strong>On your device</strong>: your login and game data stay until you log out (login), clear the App&rsquo;s data, or uninstall the App.</li>
+    <li><strong>Google Drive backup</strong>: stays in your Drive until you delete it as described in section 2.2.</li>
+    <li><strong>Firebase Analytics</strong>: kept according to the retention set for the project, at most 14 months for user-level data.</li>
+    <li><strong>Firebase Crashlytics</strong>: crash reports are kept for 90 days.</li>
+    <li><strong>AdMob</strong>: kept according to Google&rsquo;s policies.</li>
+  </ul>
+
+  <h2>7. Sharing of information</h2>
+  <p>
+    I do not sell, rent or trade your personal information. Information is only
+    shared with the service providers listed in section 3, for the purposes
+    described there, or where required by law.
+  </p>
+
+  <h2>8. Security</h2>
+  <p>
+    Your Sokker login is kept in your device&rsquo;s secure, encrypted storage, and
+    all network traffic uses HTTPS. No method of storage or transmission is
+    completely secure, so I cannot guarantee absolute security, but I take
+    reasonable steps to protect your information.
+  </p>
+
+  <h2>9. Your rights and choices</h2>
+  <p>
+    Depending on where you live (for example under the GDPR in the EU or UK, or
+    the CCPA/CPRA in California), you may have the right to access, correct,
+    delete or restrict the use of your personal data, to object to its
+    processing, to data portability, and to withdraw consent. Most of the data the
+    App handles is on your device and under your control:
+  </p>
+  <ul>
+    <li>Log out to remove your stored Sokker login.</li>
+    <li>Clear the App&rsquo;s data or uninstall it to remove all locally stored data.</li>
+    <li>Disconnect Google Drive and delete the hidden backup as described in section 2.2.</li>
+    <li>Change your ad consent with <em>Settings &rarr; Ads &rarr; Privacy options</em>, and manage your advertising ID in your device settings.</li>
+  </ul>
+  <p>
+    For data held by Google (Firebase and AdMob), I can help with requests
+    connected to the App instance identifiers. Contact me at the address below.
+    You also have the right to lodge a complaint with your local data protection
+    authority.
+  </p>
+
+  <h2>10. Children&rsquo;s privacy</h2>
+  <p>
+    The App is not directed at children under 13 (or the minimum age required in
+    your country). I do not knowingly collect personal information from children.
+    If you believe a child has provided personal information through the App,
+    please contact me and I will help remove it.
+  </p>
+
+  <h2>11. Changes to this policy</h2>
+  <p>
+    I may update this Privacy Policy when the App&rsquo;s features or services
+    change. The new version will be posted on this page with an updated effective
+    date. Please review it from time to time.
+  </p>
+
+  <h2>12. Contact</h2>
+  <p>
+    If you have any questions about this Privacy Policy or your data, contact:
+  </p>
+  <p>
+    Cuauhtemoc Calvario<br>
+    <a href="mailto:contact@ccalvario.com">contact@ccalvario.com</a>
+  </p>
+
+  <footer>
+    &copy; 2026 Cuauhtemoc Calvario. Sokkermetrics is not affiliated with Sokker.
+  </footer>
+</main>
+</body>
+</html>
